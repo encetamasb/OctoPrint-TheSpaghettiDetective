@@ -82,6 +82,7 @@ class JpegPoster:
         self.last_jpg_post_ts = 0
 
     def post_jpeg_if_needed(self, force=False):
+        return
         if not self.plugin.is_configured():
             return
 
