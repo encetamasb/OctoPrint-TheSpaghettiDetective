@@ -160,6 +160,7 @@ class TheSpaghettiDetectivePlugin(
     ##~~ Eventhandler mixin
 
     def on_event(self, event, payload):
+        return
         global _print_event_tracker
 
         try:
