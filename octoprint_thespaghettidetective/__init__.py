@@ -204,12 +204,15 @@ class TheSpaghettiDetectivePlugin(
             try:
                 self.error_tracker.attempt('server')
 
+                _logger.debug('Before checking last post time')
                 if self.last_status_update_ts < time.time() - POST_STATUS_INTERVAL_SECONDS:
                     self.post_printer_status(_print_event_tracker.octoprint_data(self), throwing=True)
+                    _logger.debug('After posting data to server')
                     backoff.reset()
 
+                _logger.debug('Before posting jpg to server')
                 self.jpeg_poster.post_jpeg_if_needed()
-                time.sleep(1)
+                time.sleep(5)
 
             except WebSocketClientException as e:
                 self.error_tracker.add_connection_error('server')
@@ -218,6 +221,8 @@ class TheSpaghettiDetectivePlugin(
                 self.sentry.captureException(tags=get_tags())
                 self.error_tracker.add_connection_error('server')
                 backoff.more(e)
+            except:
+                _logger.error('Uncaught Error!!!')
 
     def post_printer_status(self, data, throwing=False):
         if self.send_ws_msg_to_server(data, throwing=throwing):
