@@ -203,9 +203,9 @@ class TheSpaghettiDetectivePlugin(
         while True:
             try:
                 self.error_tracker.attempt('server')
-
-                _logger.debug('Before checking last post time')
-                if self.last_status_update_ts < time.time() - POST_STATUS_INTERVAL_SECONDS:
+                t_now = time.time()
+                _logger.debug('Before checking last post time. {} - {}'.format(self.last_status_update_ts, t_now))
+                if self.last_status_update_ts < t_now - POST_STATUS_INTERVAL_SECONDS:
                     self.post_printer_status(_print_event_tracker.octoprint_data(self), throwing=True)
                     _logger.debug('After posting data to server')
                     backoff.reset()
@@ -215,9 +215,11 @@ class TheSpaghettiDetectivePlugin(
                 time.sleep(5)
 
             except WebSocketClientException as e:
+                _logger.error('WebSocketClientException!!!')
                 self.error_tracker.add_connection_error('server')
                 backoff.more(e)
             except Exception as e:
+                _logger.error('Caught Exception!!!')
                 self.sentry.captureException(tags=get_tags())
                 self.error_tracker.add_connection_error('server')
                 backoff.more(e)
