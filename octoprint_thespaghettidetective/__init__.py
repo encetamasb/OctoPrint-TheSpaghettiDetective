@@ -210,7 +210,7 @@ class TheSpaghettiDetectivePlugin(
                     _logger.debug('After posting data to server')
                     backoff.reset()
 
-                _logger.debug('Before posting jpg to server')
+                _logger.debug('Before posting jpg to server. fixed.')
                 self.jpeg_poster.post_jpeg_if_needed()
                 time.sleep(5)
 
